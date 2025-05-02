@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Citizen {
+  id    String  @id @default(uuid())
+  clerkId String @unique
+  email String  @unique 
+  name  String 
+  surname String
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  comment Comment[]
+  messages Message[]
+  progression Progression[]
+  favorites Favorite[]
+  InviteSent Invite[] @relation("CitizenSentInvites")
+  InviteRecieved Invite[] @relation("CitizenReceivedInvites")
+  ressources Ressource[]
+}
+
+
+model Role {
+  id  String  @id @default(uuid())
+  name String @unique
+  citizen Citizen[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Ressource {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  maxParticipant Int?     
+  nbParticipant  Int @default(0)     
+  deadLine       DateTime?
+  category       Category @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  file           File?    @relation(fields: [fileId], references: [id])
+  fileId         String?
+  banner         Image?   @relation(fields: [bannerId], references: [id])
+  bannerId       String?
+  step           Step[]
+  favorites      Favorite[]
+  comment        Comment[]
+  progression    Progression[]
+  message        Message[]
+  isValidate     Boolean @default(false)
+  status         String
+  typeRessource   TypeRessource @relation(fields: [typeRessourceId], references: [id])
+  typeRessourceId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  citizen Citizen? @relation(fields : [citizenId], references: [id])
+  citizenId String? 
+  Invite Invite[]
+}
+
+model Category {
+  id  String  @id @default(uuid())
+  name String 
+  description String 
+  ressources Ressource[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model File {
+  id        String    @id @default(uuid())
+  path      Bytes
+  ressources Ressource[]
+}
+
+model Image {
+  id        String    @id @default(uuid())
+  url       Bytes
+  ressources Ressource[]
+}
+
+model Comment {
+  id  String  @id @default(uuid())
+  title String
+  description String
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressourceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Step {
+  id  String  @id @default(uuid())
+  title String
+  description String
+  order Int
+  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressourceId String
+  progression Progression[]
+}
+
+model Progression {
+  id  String  @id @default(uuid())
+  completed Boolean @default(false)
+  dateCompleted  DateTime?
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  step Step @relation(fields:[stepId], references : [id])
+  stepId String
+  ressource Ressource @relation(fields : [ressourceId], references : [id])
+  ressourceId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Favorite {
+  id String  @id @default(uuid())
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressourceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([citizenId, ressourceId])
+}
+
+
+model Message {
+  id  String  @id @default(uuid())
+  message String
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressourceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model TypeRessource {
+  id         String      @id @default(uuid())
+  name       String
+  ressource   Ressource[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
+}
+
+
+model Invite {
+  id         String  @id @default(uuid())
+  sender     Citizen @relation("CitizenSentInvites", fields: [senderId], references: [id])
+  senderId   String
+  recever    Citizen @relation("CitizenReceivedInvites", fields: [receverId], references: [id])
+  receverId  String
+  accept     Boolean @default(false)
+  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressourceId String
+  createdAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
