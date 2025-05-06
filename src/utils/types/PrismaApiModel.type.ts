@@ -1,8 +1,10 @@
+import { E } from '@faker-js/faker/dist/airline-D6ksJFwG';
 import {
   Role as RoleModel,
   User as UserModel,
   Article as ArticleModel,
   Category as CategoryModel,
+  Exercise as ExerciseModel,
 } from '@prisma/client';
 
 export interface UserType
@@ -40,3 +42,6 @@ export type CategoryType = Omit<
   CategoryModel,
   'createdAt' | 'updatedAt' | 'article'
 >
+
+
+export type ExerciseType = Omit<ExerciseModel, 'createdAt' | 'updatedAt'> 
