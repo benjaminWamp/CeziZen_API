@@ -5,6 +5,7 @@ import {
   Article as ArticleModel,
   Category as CategoryModel,
   Exercise as ExerciseModel,
+  ExerciseSession as ExerciseSessionModel,
 } from '@prisma/client';
 
 export interface UserType
@@ -45,3 +46,5 @@ export type CategoryType = Omit<
 
 
 export type ExerciseType = Omit<ExerciseModel, 'createdAt' | 'updatedAt'> 
+
+export type ExerciseUserType = Omit<ExerciseSessionModel, 'createdAt' | 'updatedAt'> 

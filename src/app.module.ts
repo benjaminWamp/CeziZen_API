@@ -7,6 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RoleModule } from './role/role.module';
 import { ExerciseModule } from './exercise/exercise.module';
 import { ArticleImageModule } from './article-image/article-image.module';
+import { ExerciseUserModule } from './exercise-user/exercise-user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ArticleImageModule } from './article-image/article-image.module';
     CategoryModule,
     ExerciseModule,
     ArticleImageModule,
+    ExerciseUserModule,
 ],
   controllers: [AppController],
   providers: [AppService],
