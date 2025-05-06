@@ -12,11 +12,13 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class RoleService {
   constructor(private prisma: PrismaService) {}
+
   async create(createRoleDto: CreateRoleDto) {
     try {
       const role = await this.prisma.role.create({
         data: createRoleDto,
         select: {
+          id: true,
           name: true,
         },
       });
@@ -46,19 +48,20 @@ export class RoleService {
 
   async findAll() {
     try {
-      const role = await this.prisma.role.findMany({
+      const roles = await this.prisma.role.findMany({
         select: {
+          id: true,
           name: true,
         },
       });
 
-      if (!role || role.length === 0) {
+      if (!roles || roles.length === 0) {
         throw new NotFoundException('Aucun rôle trouvé');
       }
       const totalRoles = await this.prisma.role.count();
 
       return {
-        data: role,
+        data: roles,
         total: totalRoles,
         message: 'Rôles récupérés avec succès',
       };
@@ -78,6 +81,7 @@ export class RoleService {
       const role = await this.prisma.role.findUnique({
         where: { id: id },
         select: {
+          id: true,
           name: true,
         },
       });
@@ -104,6 +108,7 @@ export class RoleService {
         data: updateRoleDto,
         where: { id: id },
         select: {
+          id: true,
           name: true,
         },
       });
@@ -148,7 +153,7 @@ export class RoleService {
         );
       }
       throw new InternalServerErrorException(
-        'Une erreur inconnue est survenue lors de la suppression du commentaire',
+        'Une erreur inconnue est survenue lors de la suppression du rôle',
       );
     }
   }

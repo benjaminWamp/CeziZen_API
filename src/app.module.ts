@@ -10,7 +10,7 @@ import { ExerciseModule } from './exercise/exercise.module';
 @Module({
   imports: [
     // ArticleModule,
-    // RoleModule,
+    RoleModule,
     ScheduleModule.forRoot(),
     CategoryModule,
     ExerciseModule,
