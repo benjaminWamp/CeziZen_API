@@ -6,6 +6,7 @@ import { CategoryModule } from './category/category.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RoleModule } from './role/role.module';
 import { ExerciseModule } from './exercise/exercise.module';
+import { ArticleImageModule } from './article-image/article-image.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ExerciseModule } from './exercise/exercise.module';
     ScheduleModule.forRoot(),
     CategoryModule,
     ExerciseModule,
+    ArticleImageModule,
 ],
   controllers: [AppController],
   providers: [AppService],
