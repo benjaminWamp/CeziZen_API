@@ -9,7 +9,7 @@ import { ExerciseModule } from './exercise/exercise.module';
 
 @Module({
   imports: [
-    // ArticleModule,
+    ArticleModule,
     RoleModule,
     ScheduleModule.forRoot(),
     CategoryModule,

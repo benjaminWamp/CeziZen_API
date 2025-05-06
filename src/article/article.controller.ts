@@ -18,7 +18,7 @@ import {
   ArticleType,
 } from 'src/utils/types/PrismaApiModel.type';
 
-@Controller('Article')
+@Controller('article')
 export class ArticleController {
   constructor(private ArticleService: ArticleService) {}
 
@@ -34,7 +34,7 @@ export class ArticleController {
   findCitizenArticles(
     @Param('citizenId') citizenId: number,
   ): Promise<ApiReturns<unknown> | null> {
-    return this.ArticleService.findCitizenArticle(citizenId);
+    return this.ArticleService.findUserArticle(citizenId);
   }
 
   @Get()
@@ -75,7 +75,7 @@ export class ArticleController {
   @Delete(':id')
   remove(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<string | { data: boolean; message: string }> {
+  ): Promise<string | { message: string }> {
     return this.ArticleService.remove(id);
   }
 }

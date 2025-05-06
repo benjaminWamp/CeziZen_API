@@ -188,7 +188,7 @@ export class ArticleService {
     }
   }
 
-  async findCitizenArticle(userId: number) {
+  async findUserArticle(userId: number) {
     try {
       const Article = await this.prisma.article.findMany({
         where: { userId },
@@ -278,7 +278,7 @@ export class ArticleService {
         where: { id: id },
       });
 
-      return { data: true, message: 'Articles supprimé avec succès' };
+      return {message: 'Articles supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
