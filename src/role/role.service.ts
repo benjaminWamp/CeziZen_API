@@ -73,7 +73,7 @@ export class RoleService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     try {
       const role = await this.prisma.role.findUnique({
         where: { id: id },
@@ -98,7 +98,7 @@ export class RoleService {
     }
   }
 
-  async update(id: string, updateRoleDto: UpdateRoleDto) {
+  async update(id: number, updateRoleDto: UpdateRoleDto) {
     try {
       const role = await this.prisma.role.update({
         data: updateRoleDto,
@@ -127,7 +127,7 @@ export class RoleService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       const role = await this.prisma.role.findUnique({
         where: { id: id },

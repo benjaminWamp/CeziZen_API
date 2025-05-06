@@ -25,6 +25,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   articles Article[]
+  sessions   ExerciseSession[]
 }
 
 
@@ -48,6 +49,7 @@ model Article {
   user User? @relation(fields : [userId], references: [id])
   userId Int? 
   images Image[]
+  articleImages ArticleImage[] @relation("ArticleArticleImages")
 }
 
 model Category {
@@ -59,9 +61,33 @@ model Category {
 }
 
 model Image {
-  id        String    @id @default(uuid())
+  id        Int    @id @default(autoincrement())
   url       Bytes
   articles Article[]
 }
+model ArticleImage {
+  id           Int        @id @default(autoincrement())
+  path         String
+  articles     Article[] @relation("ArticleArticleImages")
+}
 
+model Exercise {
+  id           Int                @id @default(autoincrement())
+  label        String
+  times        String?           
+  description  String?
+  inspiration  Int?               
+  expiration   Int?              
+  apnea        Int?               
+  sessions     ExerciseSession[]  @relation("ExerciseSessions")
+}
 
+model ExerciseSession {
+  id            Int       @id @default(autoincrement())
+  notes         String?
+  endDate       DateTime?
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int
+  exercise      Exercise  @relation("ExerciseSessions", fields: [exerciseId], references: [id])
+  exerciseId    Int
+}
