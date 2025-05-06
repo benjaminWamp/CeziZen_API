@@ -8,7 +8,7 @@ import { RoleModule } from './role/role.module';
 import { ExerciseModule } from './exercise/exercise.module';
 import { ArticleImageModule } from './article-image/article-image.module';
 import { ExerciseUserModule } from './exercise-user/exercise-user.module';
-
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ArticleModule,
@@ -18,6 +18,7 @@ import { ExerciseUserModule } from './exercise-user/exercise-user.module';
     ExerciseModule,
     ArticleImageModule,
     ExerciseUserModule,
+    UserModule
 ],
   controllers: [AppController],
   providers: [AppService],

@@ -69,7 +69,7 @@ export class UserService {
         );
       }
 
-      return { data: user, message: 'Citoyen créé avec succès' };
+      return { data: user, message: 'Utilisateur créé avec succès' };
     } catch (error) {
       console.error(error);
       if (error instanceof BadRequestException) {
@@ -139,7 +139,7 @@ export class UserService {
         );
       }
 
-      return { data: user, message: 'Citoyen créé avec succès' };
+      return { data: user, message: 'Utilisateur créé avec succès' };
     } catch (error) {
       console.error(error);
       if (error instanceof BadRequestException) {
@@ -231,7 +231,7 @@ export class UserService {
         total: totalUsers,
         page,
         pageSize,
-        message: 'Citoyens récupérés avec succès',
+        message: 'Utilisateurs récupérés avec succès',
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -260,10 +260,10 @@ export class UserService {
       });
 
       if (!user) {
-        throw new NotFoundException('Citoyen non trouvé');
+        throw new NotFoundException('Utilisateur non trouvé');
       }
 
-      return { data: user, message: 'Citoyen récupéré avec succès' };
+      return { data: user, message: 'Utilisateur récupéré avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -291,10 +291,10 @@ export class UserService {
       });
 
       if (!user) {
-        throw new NotFoundException('Citoyen non trouvé');
+        throw new NotFoundException('Utilisateur non trouvé');
       }
 
-      return { data: user, message: 'Citoyen récupéré avec succès' };
+      return { data: user, message: 'Utilisateur récupéré avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -330,10 +330,10 @@ export class UserService {
       });
 
       if (!user) {
-        throw new NotFoundException('Citoyen non trouvé pour la mise à jour');
+        throw new NotFoundException('Utilisateur non trouvé pour la mise à jour');
       }
 
-      return { data: user, message: 'Citoyen mis à jour avec succès' };
+      return { data: user, message: 'Utilisateur mis à jour avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -378,14 +378,14 @@ export class UserService {
         where: { id: id },
       });
       if (!user) {
-        throw new NotFoundException('Citoyen non trouvé');
+        throw new NotFoundException('Utilisateur non trouvé');
       }
 
       await this.clerkService.deleteClerkUser(user.clerkId);
 
       await this.prisma.user.delete({ where: { id: id } });
 
-      return { message: 'Citoyen supprimé avec succès' };
+      return { message: 'Utilisateur supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

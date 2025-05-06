@@ -30,11 +30,11 @@ export class ArticleController {
   }
 
   //Régler le problème de type incompréhensible
-  @Get('/citizen/:citizenId')
-  findCitizenArticles(
-    @Param('citizenId') citizenId: number,
+  @Get('/user/:userId')
+  findUserArticles(
+    @Param('userId', ParseIntPipe) userId: number,
   ): Promise<ApiReturns<unknown> | null> {
-    return this.ArticleService.findUserArticle(citizenId);
+    return this.ArticleService.findUserArticle(userId);
   }
 
   @Get()
