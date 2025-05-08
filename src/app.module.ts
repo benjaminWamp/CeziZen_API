@@ -9,6 +9,8 @@ import { ExerciseModule } from './exercise/exercise.module';
 import { ArticleImageModule } from './article-image/article-image.module';
 import { ExerciseUserModule } from './exercise-user/exercise-user.module';
 import { UserModule } from './user/user.module';
+import { ClerkJwtStrategy } from './auth/startegies/clerk-jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     ArticleModule,
@@ -18,9 +20,10 @@ import { UserModule } from './user/user.module';
     ExerciseModule,
     ArticleImageModule,
     ExerciseUserModule,
-    UserModule
+    UserModule,
+    PassportModule
 ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ClerkJwtStrategy],
 })
 export class AppModule {}

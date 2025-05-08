@@ -8,6 +8,9 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  UseGuards,
+  Req,
+  ForbiddenException
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -21,10 +24,13 @@ import {
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
 import { UserType } from 'src/utils/types/PrismaApiModel.type';
+import { ClerkJwtGuard } from 'src/auth/guard/clerk-jwt.guard';
+import { PrismaService } from 'src/prisma.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private prisma: PrismaService) {}
+  
 
   @Post('clerk')
   createWithClerk(
@@ -40,6 +46,8 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+
+  @UseGuards(ClerkJwtGuard)
   @Get()
   findAll(
     @Query('page') page: string = '1',
@@ -90,5 +98,37 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number): Promise<string | { message: string }> {
     return this.userService.remove(id);
+  }
+
+  // @UseGuards(ClerkJwtGuard)
+  @Get('auth')
+  async getUser(@Req() req) {
+    console.log("GETUSER");
+    
+    try {
+      const clerkId = req.user.sub;
+  
+      const user = await this.prisma.user.findUnique({
+        where: { clerkId },
+        include: { role: true },
+      });
+  
+      console.log('User:', user);
+      
+  
+      if (!user) {
+        throw new ForbiddenException('Utilisateur inconnu ou non enregistré');
+      }
+  
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role.name,
+      };
+      
+    } catch (error) {
+      console.error('Error in getUser:', error);
+      throw new ForbiddenException('Erreur lors de la récupération de l\'utilisateur');
+    }
   }
 }
