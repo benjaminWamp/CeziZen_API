@@ -4,9 +4,6 @@ export class UpdateUserDto {
   @IsNotEmpty()
   clerkId: string;
 
-  @IsNotEmpty()
-  id: number;
-
   @IsOptional()
   firstname: string;
 

@@ -65,7 +65,7 @@ export class UserService {
 
       if (!user) {
         throw new InternalServerErrorException(
-          `Une erreur est survenue lors de la création du citoyen`,
+          `Une erreur est survenue lors de la création du utilisateur`,
         );
       }
 
@@ -135,7 +135,7 @@ export class UserService {
 
       if (!user) {
         throw new InternalServerErrorException(
-          `Une erreur est survenue lors de la création du citoyen`,
+          `Une erreur est survenue lors de la création du utilisateur`,
         );
       }
 
@@ -171,12 +171,12 @@ export class UserService {
     orderBy: string = 'createdAt',
     sortBy: string = 'desc',
   ) {
+    if (page <= 0 || pageSize <= 0) {
+      throw new BadRequestException(
+        'Les paramètres page et pageSize doivent être supérieurs à 0',
+      );
+    }
     try {
-      if (page <= 0 || pageSize <= 0) {
-        throw new BadRequestException(
-          'Les paramètres page et pageSize doivent être supérieurs à 0',
-        );
-      }
 
       if (sortBy !== 'asc' && sortBy !== 'desc') {
         throw new BadRequestException(
@@ -222,7 +222,7 @@ export class UserService {
       });
 
       if (!users || users.length === 0) {
-        throw new NotFoundException('Aucun citoyen trouvé');
+        throw new NotFoundException('Aucun utilisateur trouvé');
       }
       const totalUsers = await this.prisma.user.count();
 
@@ -374,6 +374,8 @@ export class UserService {
 
   async remove(id: number) {
     try {
+      await this.prisma.article.deleteMany({ where: { userId: id } });
+    await this.prisma.exerciseSession.deleteMany({ where: { userId: id } });
       const user = await this.prisma.user.findUnique({
         where: { id: id },
       });
@@ -392,11 +394,11 @@ export class UserService {
       }
       if (error.code === 'P2003') {
         throw new ForbiddenException(
-          'Impossible de supprimer ce citoyen : contrainte de dépendance',
+          'Impossible de supprimer cet utilisateur : contrainte de dépendance',
         );
       }
       throw new InternalServerErrorException(
-        'Une erreur inconnue est survenue lors de la suppression du citoyen',
+        'Une erreur inconnue est survenue lors de la suppression du utilisateur',
       );
     }
   }

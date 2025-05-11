@@ -9,6 +9,9 @@ import { ExerciseModule } from './exercise/exercise.module';
 import { ArticleImageModule } from './article-image/article-image.module';
 import { ExerciseUserModule } from './exercise-user/exercise-user.module';
 import { UserModule } from './user/user.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 @Module({
   imports: [
     ArticleModule,
@@ -18,7 +21,11 @@ import { UserModule } from './user/user.module';
     ExerciseModule,
     ArticleImageModule,
     ExerciseUserModule,
-    UserModule
+    UserModule,
+    ServeStaticModule.forRoot({
+      serveRoot: '/uploads',      
+      rootPath: join(process.cwd(), 'uploads'),
+    }),
 ],
   controllers: [AppController],
   providers: [AppService],

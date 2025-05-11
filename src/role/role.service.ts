@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -31,6 +32,9 @@ export class RoleService {
 
       return { data: role, message: 'Rôle créé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
@@ -66,6 +70,9 @@ export class RoleService {
         message: 'Rôles récupérés avec succès',
       };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -77,6 +84,9 @@ export class RoleService {
   }
 
   async findOne(id: number) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const role = await this.prisma.role.findUnique({
         where: { id: id },
@@ -92,6 +102,9 @@ export class RoleService {
 
       return { data: role, message: 'Rôle récupéré avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -103,6 +116,9 @@ export class RoleService {
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const role = await this.prisma.role.update({
         data: updateRoleDto,
@@ -119,6 +135,9 @@ export class RoleService {
 
       return { data: role, message: 'Rôle mis à jour avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -133,6 +152,9 @@ export class RoleService {
   }
 
   async remove(id: number) {
+    if (id <= 0) {
+    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+  }
     try {
       const role = await this.prisma.role.findUnique({
         where: { id: id },
@@ -144,6 +166,9 @@ export class RoleService {
       await this.prisma.role.delete({ where: { id: id } });
       return { message: 'Rôle supprimé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }

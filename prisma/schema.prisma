@@ -41,7 +41,7 @@ model Article {
   id             Int   @id @default(autoincrement())
   label          String
   description    String
-  content       String    
+  content       String   @db.LongText 
   category       Category @relation(fields: [categoryId], references: [id])
   categoryId     Int
   createdAt      DateTime @default(now())
@@ -90,4 +90,6 @@ model ExerciseSession {
   userId        Int
   exercise      Exercise  @relation("ExerciseSessions", fields: [exerciseId], references: [id])
   exerciseId    Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }

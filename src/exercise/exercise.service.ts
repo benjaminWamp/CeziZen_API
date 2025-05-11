@@ -87,6 +87,9 @@ export class ExerciseService {
   }
 
   async findOne(id: number) {
+    if (id <= 0) {
+    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+  }
     try {
       const exercise = await this.prisma.exercise.findUnique({
         where: { id: id },

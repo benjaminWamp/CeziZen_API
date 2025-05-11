@@ -5,6 +5,7 @@ import {
   InternalServerErrorException,
   ForbiddenException,
   BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -48,11 +49,19 @@ export class ArticleService {
               lastname: true,
             },
           },
+          articleImages: {
+            select: {
+              id: true,
+              path: true,
+            }},
         },
       });
 
       return { data: ressourceFinal, message: 'Articles créé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error.code === 'P2002') {
         throw new BadRequestException(
           'Une erreur de validation est survenue (données dupliquées)',
@@ -71,12 +80,12 @@ export class ArticleService {
     orderBy: string = 'createdAt',
     sortBy: string = 'desc',
   ) {
+    if (page <= 0 || pageSize <= 0) {
+      throw new BadRequestException(
+        'Les paramètres page et pageSize doivent être supérieurs à 0',
+      );
+    }
     try {
-      if (page <= 0 || pageSize <= 0) {
-        throw new BadRequestException(
-          'Les paramètres page et pageSize doivent être supérieurs à 0',
-        );
-      }
 
       if (sortBy !== 'asc' && sortBy !== 'desc') {
         throw new BadRequestException(
@@ -124,6 +133,11 @@ export class ArticleService {
               lastname: true,
             },
           },
+          articleImages: {
+            select: {
+              id: true,
+              path: true,
+            }},
         },
       });
 
@@ -140,6 +154,9 @@ export class ArticleService {
         message: 'Articles récupérés avec succès',
       };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -151,6 +168,9 @@ export class ArticleService {
   }
 
   async findOne(id: number) {
+    if (id <= 0) {
+    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+  }
     try {
       const Article = await this.prisma.article.findUnique({
         where: { id: id },
@@ -169,6 +189,11 @@ export class ArticleService {
               lastname: true,
             },
           },
+          articleImages: {
+            select: {
+              id: true,
+              path: true,
+            }},
         },
       });
 
@@ -178,6 +203,9 @@ export class ArticleService {
 
       return { data: Article, message: 'Articles récupéré avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -189,6 +217,9 @@ export class ArticleService {
   }
 
   async findUserArticle(userId: number) {
+    if (userId <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const Article = await this.prisma.article.findMany({
         where: { userId },
@@ -204,6 +235,11 @@ export class ArticleService {
               lastname: true,
             },
           },
+          articleImages: {
+            select: {
+              id: true,
+              path: true,
+            }},
         },
       });
 
@@ -213,6 +249,9 @@ export class ArticleService {
 
       return { data: Article, message: 'Articles récupéré avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -224,6 +263,9 @@ export class ArticleService {
   }
 
   async update(id: number, updateArticleDto: UpdateArticleDto) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const Article = await this.prisma.article.update({
         data: updateArticleDto,
@@ -243,6 +285,11 @@ export class ArticleService {
               lastname: true,
             },
           },
+          articleImages: {
+            select: {
+              id: true,
+              path: true,
+            }},
         },
       });
 
@@ -252,6 +299,9 @@ export class ArticleService {
 
       return { data: Article, message: 'Articles mis à jour avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -266,6 +316,9 @@ export class ArticleService {
   }
 
   async remove(id: number) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const article = await this.prisma.article.findUnique({
         where: { id: id },
@@ -280,6 +333,9 @@ export class ArticleService {
 
       return {message: 'Articles supprimé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }

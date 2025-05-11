@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -30,6 +31,9 @@ export class CategoryService {
 
       return { data: category, message: 'Catégorie créé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
@@ -62,6 +66,9 @@ export class CategoryService {
         message: 'Catégories récupérés avec succès',
       };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -73,6 +80,9 @@ export class CategoryService {
   }
 
   async findOne(id: number) {
+    if (id <= 0) {
+    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+  }
     try {
       const category = await this.prisma.category.findUnique({
         where: { id: id },
@@ -85,6 +95,9 @@ export class CategoryService {
 
       return { data: category, message: 'Catégorie récupéré avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -96,6 +109,9 @@ export class CategoryService {
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const category = await this.prisma.category.update({
         data: updateCategoryDto,
@@ -109,6 +125,9 @@ export class CategoryService {
 
       return { data: category, message: 'Catégorie mis à jour avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -123,6 +142,9 @@ export class CategoryService {
   }
 
   async remove(id: number) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       const category = await this.prisma.category.findUnique({
         where: { id: id },
@@ -134,6 +156,9 @@ export class CategoryService {
       await this.prisma.category.delete({ where: { id: id } });
       return { message: 'Catégorie supprimé avec succès' };
     } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       if (error instanceof NotFoundException) {
         throw error;
       }

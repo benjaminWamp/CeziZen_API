@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   ForbiddenException,
   BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateExerciseUserDto } from './dto/create-exercise-user.dto';
@@ -21,7 +22,21 @@ export class ExerciseUserService {
       });
       return { data: session, message: 'Session créée avec succès' };
     } catch (error) {
-      throw new InternalServerErrorException('Erreur lors de la création de la session');
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      if (error instanceof InternalServerErrorException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
     }
   }
 
@@ -32,12 +47,18 @@ export class ExerciseUserService {
       });
       const total = await this.prisma.exerciseSession.count();
       return { data: sessions, total, message: 'Sessions récupérées' };
-    } catch {
+    } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       throw new InternalServerErrorException('Erreur lors de la récupération');
     }
   }
 
   async findOne(id: number) {
+    if (id <= 0) {
+    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+  }
     try {
       const session = await this.prisma.exerciseSession.findUnique({
         where: { id },
@@ -45,7 +66,10 @@ export class ExerciseUserService {
       });
       if (!session) throw new NotFoundException('Session non trouvée');
       return { data: session, message: 'Session trouvée' };
-    } catch {
+    } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       throw new InternalServerErrorException('Erreur lors de la recherche');
     }
   }
@@ -58,16 +82,25 @@ export class ExerciseUserService {
         include: { user: true, exercise: true },
       });
       return { data: session, message: 'Session mise à jour' };
-    } catch {
+    } catch (error) {
+if (error instanceof HttpException) {
+      throw error;
+    }
       throw new InternalServerErrorException('Erreur lors de la mise à jour');
     }
   }
 
   async remove(id: number) {
+    if (id <= 0) {
+      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+    }
     try {
       await this.prisma.exerciseSession.delete({ where: { id } });
       return { message: 'Session supprimée avec succès' };
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error.code === 'P2003') {
         throw new ForbiddenException('Contrainte détectée, suppression impossible');
       }
