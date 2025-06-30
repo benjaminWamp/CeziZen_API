@@ -6,10 +6,12 @@ on:
     branches:
       - main
       - dev
-  pull_request:
-    branches:
-      - main
-      - dev
+      - feat/githubAction
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - dev
+  #     - feat/githubAction
 
 jobs:
   lint:
