@@ -190,8 +190,8 @@ export class UserService {
 
       const validOrderByFields = [
         'email',
-        'name',
-        'surname',
+        'firstname',
+        'lastname',
         'createdAt',
         'updatedAt',
       ];

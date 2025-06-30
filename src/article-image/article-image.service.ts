@@ -27,8 +27,6 @@ if (error instanceof HttpException) {
     }
   }
   async updateArticleImage(articleId: number, newImagePath: string) {
-    const fs = require('fs');
-
     const previousImages = await this.prisma.article.findUnique({
       where: { id: articleId },
       include: { articleImages: true },
