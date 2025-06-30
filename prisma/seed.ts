@@ -56,13 +56,13 @@ async function main() {
   void createCitizen([admin, moderator, user, superAdmin]);
 
   await citizenService.createWithClerk({
-    clerkId: 'user_2vxGqhwgYnDCxHAH3za04SvwYTG',
+    clerkId: 'user_2wtYZz0bJnblZfMsiNxAaXO47dG',
   });
 
   console.log('Utilisateur Clerk demo créé en BDD');
 
   const demoCitizen = await prisma.user.findUnique({
-    where: { clerkId: 'user_2vxGqhwgYnDCxHAH3za04SvwYTG' },
+    where: { clerkId: 'user_2wtYZz0bJnblZfMsiNxAaXO47dG' },
   });
 
   if (!demoCitizen) {

@@ -18,14 +18,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma": "npx prisma migrate dev npx prisma db seed"
+    "prisma": "npx prisma migrate dev npx prisma db seed",
+    "start:migrate:prod": "prisma migrate deploy && npm run start:prod"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
-    "@faker-js/faker": "^9.4.0",
+    "@faker-js/faker": "^9.7.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
@@ -73,15 +74,32 @@
     "typescript-eslint": "^8.23.0"
   },
   "jest": {
-  "moduleFileExtensions": ["js","json","ts"],
-  "rootDir": "src",
-  "testRegex": ".*\\.spec\\.ts$",
-  "transform": { "^.+\\.(t|j)s$": "ts-jest" },
-  "collectCoverageFrom": ["**/*.(t|j)s"],
-  "coverageDirectory": "../coverage",
-  "testEnvironment": "node",
-  "moduleNameMapper": {
-    "^src/(.*)$": "<rootDir>/$1"
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s",
+      "!**/*.dto.(t|j)s",
+      "!**/*.module.(t|j)s",
+      "!**/*.controller.(t|j)s",
+      "!**/*.entity.(t|j)s",
+      "!**/.module.ts",
+      "!**/main.ts",
+      "!**/*multer.config.ts",
+      "!**/utils/**",
+      "!**/auth/**"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
-}
 }

@@ -1,0 +1,39 @@
+services: 
+  app:
+    image: myapp:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./app:/usr/src/app
+    depends_on:
+      - maria_db
+    # networks:
+    #   - mynetwork
+  maria_db: 
+    image: mariadb:11.8-ubi-rc
+    restart: unless-stopped
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+      MARIADB_PASSWORD: ${DATABASE_PASSWORD}
+      MARIADB_USER: ${DATABASE_USER}
+      MARIADB_DATABASE: ${DATABASE_NAME}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+
+    volumes:
+      - db:/var/lib/mysql:Z
+
+volumes:
+  db:
+    # networks:
+    #   db
+# networks:
+#   mynetwork:
+#     driver: bridge
+#   db:
+#     driver: bridge

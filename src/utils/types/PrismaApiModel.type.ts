@@ -1,4 +1,3 @@
-import { E } from '@faker-js/faker/dist/airline-D6ksJFwG';
 import {
   Role as RoleModel,
   User as UserModel,

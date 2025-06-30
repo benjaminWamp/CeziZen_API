@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `article` MODIFY `content` LONGTEXT NOT NULL;
+ALTER TABLE `Article` MODIFY `Content` LONGTEXT NOT NULL;
