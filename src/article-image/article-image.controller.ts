@@ -2,9 +2,11 @@
 import { Controller, Post, Put, Param, UseInterceptors, UploadedFile, ParseIntPipe } from '@nestjs/common';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage, File, FileNameCallback  } from 'multer';
+import { diskStorage, File  } from 'multer';
 import { extname } from 'path';
 import { ArticleImageService } from './article-image.service';
+
+type FileNameCallback = (error: Error | null, filename: string) => void;
 
 @Controller('article-image')
 export class ArticleImageController {
