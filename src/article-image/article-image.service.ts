@@ -1,4 +1,4 @@
-import { HttpException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateArticleImageDto } from './dto/create-article-image.dto';
 import { UpdateArticleImageDto } from './dto/update-article-image.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -19,13 +19,14 @@ export class ArticleImageService {
             : undefined,
         },
       });
-    } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
-      throw new InternalServerErrorException('Erreur lors de la création de l’image');
+    } catch (error: unknown) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Erreur lors de la creation de l'image");
     }
   }
+  
   async updateArticleImage(articleId: number, newImagePath: string) {
     const previousImages = await this.prisma.article.findUnique({
       where: { id: articleId },
@@ -55,7 +56,7 @@ if (error instanceof HttpException) {
     });
   
     return {
-      message: 'Image de l’article mise à jour avec succès',
+      message: "Image de l'article mise a jour avec succes",
       data: updatedArticle,
     };
   }
@@ -69,7 +70,7 @@ if (error instanceof HttpException) {
       throw new NotFoundException(`Article ${articleId} introuvable`);
     }
     if (!article.articleImages || article.articleImages.length === 0) {
-      throw new NotFoundException(`Image ${imageId} non liée à l'article ${articleId}`);
+      throw new NotFoundException(`Image ${imageId} non liee a l'article ${articleId}`);
     }
 
     await this.prisma.article.update({
@@ -86,18 +87,17 @@ if (error instanceof HttpException) {
     const filePath = join(process.cwd(), 'uploads', 'article-images', filename!);
     try {
       await fs.promises.unlink(filePath);
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof HttpException) {
         throw err;
       }
-      if ((err as any).code !== 'ENOENT') {
+      if (err && typeof err === 'object' && 'code' in err && (err as NodeJS.ErrnoException).code !== 'ENOENT') {
         throw new InternalServerErrorException(`Erreur suppression fichier ${filename}`);
       }
     }
 
     await this.prisma.articleImage.delete({ where: { id: imageId } });
 
-    return { message: `Image ${imageId} supprimée de l'article ${articleId}` };
+    return { message: `Image ${imageId} supprimee de l'article ${articleId}` };
   }
-
 }
