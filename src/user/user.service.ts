@@ -42,11 +42,17 @@ export class UserService {
         },
       });
 
+      if (!defaultRoleId) {
+        throw new NotFoundException(
+          'Rôle par défaut "USER" non trouvé dans la base de données',
+        );
+      }
+
       const newUser = {
         firstname: clerkUser.firstName || '',
         lastname: clerkUser.lastName || '',
         email: clerkUser.emailAddresses[0].emailAddress,
-        roleId: createUserDto.roleId ? Number(createUserDto.roleId) : defaultRoleId?.id!,
+        roleId: createUserDto.roleId ? Number(createUserDto.roleId) : defaultRoleId.id,
         clerkId: clerkUser.id,
       };
 
@@ -112,11 +118,17 @@ export class UserService {
         },
       });
 
+      if (!defaultRoleId) {
+        throw new NotFoundException(
+          'Rôle par défaut "USER" non trouvé dans la base de données',
+        );
+      }
+
       const newUser = {
         firstname: clerkUser.firstName || '',
         lastname: clerkUser.lastName || '',
         email: clerkUser.emailAddresses[0].emailAddress,
-        roleId: defaultRoleId?.id!,
+        roleId: defaultRoleId.id,
         clerkId: clerkUser.id,
       };
 
