@@ -2,7 +2,7 @@
 import { Controller, Post, Put, Param, UseInterceptors, UploadedFile, ParseIntPipe } from '@nestjs/common';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage, File } from 'multer';
+import { diskStorage, File, FileNameCallback  } from 'multer';
 import { extname } from 'path';
 import { ArticleImageService } from './article-image.service';
 
@@ -17,7 +17,7 @@ export class ArticleImageController {
       filename: (
         req: Request,
         file: File,
-        callback: (err: Error | null, filename: string) => void
+        callback: FileNameCallback
       ) => {
         const uniqueSuffix: string = Date.now() + '-' + Math.round(Math.random() * 1e9);
         const ext: string = extname(file.originalname);
@@ -38,7 +38,7 @@ export class ArticleImageController {
       filename: (
         req: Request,
         file: File,
-        callback: (err: Error | null, filename: string) => void
+        callback: FileNameCallback
       ) => {
         const name: string = `article-${Date.now()}${extname(file.originalname)}`;
         callback(null, name);
