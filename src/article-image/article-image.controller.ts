@@ -1,6 +1,6 @@
 
 import { Controller, Post, Put, Param, UseInterceptors, UploadedFile, ParseIntPipe } from '@nestjs/common';
-import { Express, Request } from 'express';
+import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage, File } from 'multer';
 import { extname } from 'path';
@@ -19,15 +19,15 @@ export class ArticleImageController {
         file: File,
         callback: (err: Error | null, filename: string) => void
       ) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const ext = extname(file.originalname);
+        const uniqueSuffix: string = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const ext: string = extname(file.originalname);
         callback(null, `article-${uniqueSuffix}${ext}`);
       },
     }),
   }))
   async uploadFile(@UploadedFile() file: File) {
-    const path = `/uploads/article-images/${file.filename}`;
-    const image = await this.articleImageService.create({ path });
+    const path: string = `/uploads/article-images/${file.filename}`;
+    const image: { id: number; path: string } = await this.articleImageService.create({ path });
     return { message: 'Image enregistrée', data: image };
   }
 
@@ -40,7 +40,7 @@ export class ArticleImageController {
         file: File,
         callback: (err: Error | null, filename: string) => void
       ) => {
-        const name = `article-${Date.now()}${extname(file.originalname)}`;
+        const name: string = `article-${Date.now()}${extname(file.originalname)}`;
         callback(null, name);
       },
     }),
@@ -49,7 +49,7 @@ export class ArticleImageController {
     @Param('id', ParseIntPipe) id: number,
     @UploadedFile() file: File,
   ) {
-    const imagePath = `/uploads/article-images/${file.filename}`;
+    const imagePath: string = `/uploads/article-images/${file.filename}`;
     return this.articleImageService.updateArticleImage(id, imagePath);
   }
 }
