@@ -6,7 +6,7 @@ import { diskStorage, File  } from 'multer';
 import { extname } from 'path';
 import { ArticleImageService } from './article-image.service';
 
-type FileNameCallback = (error: Error | null, filename: string) => void;
+type FileNameCallback = (error:  null, filename: string) => void;
 
 @Controller('article-image')
 export class ArticleImageController {
@@ -19,7 +19,7 @@ export class ArticleImageController {
       filename: (
         req: Request,
         file: File,
-        callback: (error: null, filename: string) => void
+        callback: FileNameCallback
       ) => {
         const uniqueSuffix: string = Date.now() + '-' + Math.round(Math.random() * 1e9);
         const ext: string = extname(file.originalname);
