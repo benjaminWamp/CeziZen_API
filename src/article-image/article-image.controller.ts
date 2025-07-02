@@ -19,7 +19,7 @@ export class ArticleImageController {
       filename: (
         req: Request,
         file: File,
-        callback: FileNameCallback
+        callback: (error: null, filename: string) => void
       ) => {
         const uniqueSuffix: string = Date.now() + '-' + Math.round(Math.random() * 1e9);
         const ext: string = extname(file.originalname);
