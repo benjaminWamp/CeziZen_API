@@ -3,10 +3,6 @@ name: CI/CD NestJS + Docker
 
 on:
   push:
-    branches:
-      - main
-      - dev
-      - feat/githubAction
   # pull_request:
   #   branches:
   #     - main

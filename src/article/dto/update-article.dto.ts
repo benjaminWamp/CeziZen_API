@@ -22,5 +22,4 @@ export class UpdateArticleDto {
   @IsOptional()
   @IsNotEmpty()
   categoryId: number;
-
 }

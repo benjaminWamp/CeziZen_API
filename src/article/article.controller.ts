@@ -14,9 +14,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
-import {
-  ArticleType,
-} from 'src/utils/types/PrismaApiModel.type';
+import { ArticleType } from 'src/utils/types/PrismaApiModel.type';
 
 @Controller('article')
 export class ArticleController {

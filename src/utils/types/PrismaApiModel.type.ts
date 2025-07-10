@@ -18,32 +18,22 @@ export interface UserType
 export interface ArticleType
   extends Omit<
     ArticleModel,
-    | 'category'
-    | 'categoryId'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'userId'
+    'category' | 'categoryId' | 'createdAt' | 'updatedAt' | 'userId'
   > {
   user: Pick<UserType, 'id' | 'firstname' | 'lastname'> | null;
 }
 
 export interface ArticleTypeUser
-  extends Omit<
-    ArticleType,
-    | 'user'
-    | 'id'
-    | 'description'
-    | 'label'
-  > {}
-
-
+  extends Omit<ArticleType, 'user' | 'id' | 'description' | 'label'> {}
 
 export type CategoryType = Omit<
   CategoryModel,
   'createdAt' | 'updatedAt' | 'article'
->
+>;
 
+export type ExerciseType = Omit<ExerciseModel, 'createdAt' | 'updatedAt'>;
 
-export type ExerciseType = Omit<ExerciseModel, 'createdAt' | 'updatedAt'> 
-
-export type ExerciseUserType = Omit<ExerciseSessionModel, 'createdAt' | 'updatedAt'> 
+export type ExerciseUserType = Omit<
+  ExerciseSessionModel,
+  'createdAt' | 'updatedAt'
+>;

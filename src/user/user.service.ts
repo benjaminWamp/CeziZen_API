@@ -1,4 +1,4 @@
-  /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   NotFoundException,
@@ -6,14 +6,8 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import {
-  CreateUserDto,
-  CreateUserwithClerkDTo,
-} from './dto/create-user.dto';
-import {
-  UpdateUserCredentialsDto,
-  UpdateUserDto,
-} from './dto/update-user.dto';
+import { CreateUserDto, CreateUserwithClerkDTo } from './dto/create-user.dto';
+import { UpdateUserCredentialsDto, UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { ClerkService } from 'src/auth/clerk.service';
 import { User } from '@clerk/clerk-sdk-node';
@@ -52,7 +46,9 @@ export class UserService {
         firstname: clerkUser.firstName || '',
         lastname: clerkUser.lastName || '',
         email: clerkUser.emailAddresses[0].emailAddress,
-        roleId: createUserDto.roleId ? Number(createUserDto.roleId) : defaultRoleId.id,
+        roleId: createUserDto.roleId
+          ? Number(createUserDto.roleId)
+          : defaultRoleId.id,
         clerkId: clerkUser.id,
       };
 
@@ -189,7 +185,6 @@ export class UserService {
       );
     }
     try {
-
       if (sortBy !== 'asc' && sortBy !== 'desc') {
         throw new BadRequestException(
           'Le paramètre "sort" doit être "asc" ou "desc"',
@@ -322,10 +317,7 @@ export class UserService {
     try {
       const userData = updateUserDto;
 
-      await this.clerkService.updateClerkUser(
-        userData.clerkId,
-        updateUserDto,
-      );
+      await this.clerkService.updateClerkUser(userData.clerkId, updateUserDto);
 
       const user = await this.prisma.user.update({
         data: userData,
@@ -342,7 +334,9 @@ export class UserService {
       });
 
       if (!user) {
-        throw new NotFoundException('Utilisateur non trouvé pour la mise à jour');
+        throw new NotFoundException(
+          'Utilisateur non trouvé pour la mise à jour',
+        );
       }
 
       return { data: user, message: 'Utilisateur mis à jour avec succès' };
@@ -387,7 +381,7 @@ export class UserService {
   async remove(id: number) {
     try {
       await this.prisma.article.deleteMany({ where: { userId: id } });
-    await this.prisma.exerciseSession.deleteMany({ where: { userId: id } });
+      await this.prisma.exerciseSession.deleteMany({ where: { userId: id } });
       const user = await this.prisma.user.findUnique({
         where: { id: id },
       });

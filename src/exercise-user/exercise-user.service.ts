@@ -48,17 +48,17 @@ export class ExerciseUserService {
       const total = await this.prisma.exerciseSession.count();
       return { data: sessions, total, message: 'Sessions récupérées' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Erreur lors de la récupération');
     }
   }
 
   async findOne(id: number) {
     if (id <= 0) {
-    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
-  }
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
+    }
     try {
       const session = await this.prisma.exerciseSession.findUnique({
         where: { id },
@@ -67,9 +67,9 @@ if (error instanceof HttpException) {
       if (!session) throw new NotFoundException('Session non trouvée');
       return { data: session, message: 'Session trouvée' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Erreur lors de la recherche');
     }
   }
@@ -83,16 +83,16 @@ if (error instanceof HttpException) {
       });
       return { data: session, message: 'Session mise à jour' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new InternalServerErrorException('Erreur lors de la mise à jour');
     }
   }
 
   async remove(id: number) {
     if (id <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       await this.prisma.exerciseSession.delete({ where: { id } });
@@ -102,7 +102,9 @@ if (error instanceof HttpException) {
         throw error;
       }
       if (error.code === 'P2003') {
-        throw new ForbiddenException('Contrainte détectée, suppression impossible');
+        throw new ForbiddenException(
+          'Contrainte détectée, suppression impossible',
+        );
       }
       throw new InternalServerErrorException('Erreur lors de la suppression');
     }

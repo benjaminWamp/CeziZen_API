@@ -33,6 +33,7 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-object-type': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
+      // "@typescript-eslint/no-unsafe-assignment": "warn".
     },
   },
 );

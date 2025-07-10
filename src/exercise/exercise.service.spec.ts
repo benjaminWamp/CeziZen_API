@@ -71,7 +71,9 @@ describe('ExerciseService', () => {
     });
 
     it('devrait lever BadRequestException sur duplication (P2002)', async () => {
-      (prisma.exercise.create as jest.Mock).mockRejectedValue({ code: 'P2002' });
+      (prisma.exercise.create as jest.Mock).mockRejectedValue({
+        code: 'P2002',
+      });
       await expect(service.create(dto)).rejects.toThrow(BadRequestException);
     });
 
@@ -197,7 +199,9 @@ describe('ExerciseService', () => {
     });
 
     it('devrait lever BadRequestException sur duplication', async () => {
-      (prisma.exercise.update as jest.Mock).mockRejectedValue({ code: 'P2002' });
+      (prisma.exercise.update as jest.Mock).mockRejectedValue({
+        code: 'P2002',
+      });
       await expect(service.update(6, dto)).rejects.toThrow(BadRequestException);
     });
 
@@ -231,7 +235,9 @@ describe('ExerciseService', () => {
 
     it('devrait lever ForbiddenException sur contrainte P2003', async () => {
       (prisma.exercise.findUnique as jest.Mock).mockResolvedValue({ id: 9 });
-      (prisma.exercise.delete as jest.Mock).mockRejectedValue({ code: 'P2003' });
+      (prisma.exercise.delete as jest.Mock).mockRejectedValue({
+        code: 'P2003',
+      });
       await expect(service.remove(9)).rejects.toThrow(ForbiddenException);
     });
 

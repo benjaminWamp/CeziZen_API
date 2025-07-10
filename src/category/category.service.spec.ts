@@ -1,7 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  CategoryService,
-} from './category.service';
+import { CategoryService } from './category.service';
 import { PrismaService } from 'src/prisma.service';
 import {
   BadRequestException,
@@ -55,7 +53,9 @@ describe('CategoryService', () => {
     });
 
     it('devrait lever BadRequestException sur duplication (P2002)', async () => {
-      (prisma.category.create as jest.Mock).mockRejectedValue({ code: 'P2002' });
+      (prisma.category.create as jest.Mock).mockRejectedValue({
+        code: 'P2002',
+      });
       await expect(service.create({ label: 'dup' } as any)).rejects.toThrow(
         BadRequestException,
       );
@@ -71,7 +71,10 @@ describe('CategoryService', () => {
 
   describe('findAll()', () => {
     it('devrait renvoyer la liste paginée', async () => {
-      const mockCats = [{ id: 1, label: 'A' }, { id: 2, label: 'B' }];
+      const mockCats = [
+        { id: 1, label: 'A' },
+        { id: 2, label: 'B' },
+      ];
       (prisma.category.findMany as jest.Mock).mockResolvedValue(mockCats);
       (prisma.category.count as jest.Mock).mockResolvedValue(2);
 
@@ -158,7 +161,9 @@ describe('CategoryService', () => {
     });
 
     it('devrait lever BadRequestException sur duplication (P2002)', async () => {
-      (prisma.category.update as jest.Mock).mockRejectedValue({ code: 'P2002' });
+      (prisma.category.update as jest.Mock).mockRejectedValue({
+        code: 'P2002',
+      });
       await expect(service.update(6, {} as any)).rejects.toThrow(
         BadRequestException,
       );
@@ -194,7 +199,9 @@ describe('CategoryService', () => {
 
     it('devrait lever ForbiddenException sur contrainte (P2003)', async () => {
       (prisma.category.findUnique as jest.Mock).mockResolvedValue({ id: 9 });
-      (prisma.category.delete as jest.Mock).mockRejectedValue({ code: 'P2003' });
+      (prisma.category.delete as jest.Mock).mockRejectedValue({
+        code: 'P2003',
+      });
       await expect(service.remove(9)).rejects.toThrow(ForbiddenException);
     });
 

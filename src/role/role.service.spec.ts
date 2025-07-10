@@ -27,10 +27,7 @@ describe('RoleService', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        RoleService,
-        { provide: PrismaService, useValue: prisma },
-      ],
+      providers: [RoleService, { provide: PrismaService, useValue: prisma }],
     }).compile();
 
     service = module.get(RoleService);
@@ -69,7 +66,10 @@ describe('RoleService', () => {
 
   describe('findAll()', () => {
     it('devrait retourner tous les rôles et le total', async () => {
-      const roles = [{ id: 1, name: 'A' }, { id: 2, name: 'B' }];
+      const roles = [
+        { id: 1, name: 'A' },
+        { id: 2, name: 'B' },
+      ];
       (prisma.role.findMany as jest.Mock).mockResolvedValue(roles);
       (prisma.role.count as jest.Mock).mockResolvedValue(2);
 
@@ -108,7 +108,10 @@ describe('RoleService', () => {
         where: { id: 5 },
         select: { id: true, name: true },
       });
-      expect(result).toEqual({ data: role, message: 'Rôle récupéré avec succès' });
+      expect(result).toEqual({
+        data: role,
+        message: 'Rôle récupéré avec succès',
+      });
     });
 
     it('devrait lever NotFoundException si introuvable', async () => {
@@ -145,9 +148,7 @@ describe('RoleService', () => {
 
     it('devrait lever BadRequestException sur duplication (P2002)', async () => {
       (prisma.role.update as jest.Mock).mockRejectedValue({ code: 'P2002' });
-      await expect(service.update(7, dto)).rejects.toThrow(
-        BadRequestException,
-      );
+      await expect(service.update(7, dto)).rejects.toThrow(BadRequestException);
     });
 
     it('devrait lever InternalServerErrorException sur autre erreur', async () => {

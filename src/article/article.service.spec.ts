@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { ArticleService } from './article.service';
@@ -82,29 +82,45 @@ describe('ArticleService', () => {
 
     it('devrait lever BadRequestException sur conflit P2002', async () => {
       (prisma.article.create as jest.Mock).mockRejectedValue({ code: 'P2002' });
-      await expect(service.create({} as any)).rejects.toThrow(BadRequestException);
+      await expect(service.create({} as any)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('devrait lever InternalServerErrorException sinon', async () => {
       (prisma.article.create as jest.Mock).mockRejectedValue(new Error('x'));
-      await expect(service.create({} as any)).rejects.toThrow(InternalServerErrorException);
+      await expect(service.create({} as any)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
   describe('findAll()', () => {
     it('devrait retourner une page d’articles', async () => {
-      const items = [{ id: 1, label: 'L', description: 'D', content: 'C', category: { id:1,label:'C' }, user: { id:2, firstname:'A', lastname:'B' }, articleImages: [] }];
+      const items = [
+        {
+          id: 1,
+          label: 'L',
+          description: 'D',
+          content: 'C',
+          category: { id: 1, label: 'C' },
+          user: { id: 2, firstname: 'A', lastname: 'B' },
+          articleImages: [],
+        },
+      ];
       mockPrisma.article.findMany.mockResolvedValue(items);
       mockPrisma.article.count.mockResolvedValue(42);
 
       const res = await service.findAll(2, 5, 'createdAt', 'asc');
 
-      expect(prisma.article.findMany).toHaveBeenCalledWith(expect.objectContaining({
-        skip: 5,
-        take: 5,
-        orderBy: { createdAt: 'asc' },
-        select: expect.any(Object),
-      }));
+      expect(prisma.article.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          skip: 5,
+          take: 5,
+          orderBy: { createdAt: 'asc' },
+          select: expect.any(Object),
+        }),
+      );
       expect(res).toEqual({
         data: items,
         total: 42,
@@ -121,15 +137,29 @@ describe('ArticleService', () => {
 
     it('devrait lever BadRequestException sur paramètres invalides', async () => {
       await expect(service.findAll(0, 10)).rejects.toThrow(BadRequestException);
-      await expect(service.findAll(1, 101)).rejects.toThrow(BadRequestException);
-      await expect(service.findAll(1, 10, 'foo' as any)).rejects.toThrow(BadRequestException);
-      await expect(service.findAll(1, 10, 'createdAt', 'foo' as any)).rejects.toThrow(BadRequestException);
+      await expect(service.findAll(1, 101)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(service.findAll(1, 10, 'foo' as any)).rejects.toThrow(
+        BadRequestException,
+      );
+      await expect(
+        service.findAll(1, 10, 'createdAt', 'foo' as any),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('findOne()', () => {
     it('devrait retourner un article existant', async () => {
-      const art = { id: 7, label: 'X', description: 'Y', content: 'Z', category:{id:1,label:'C'}, user:{id:2,firstname:'A',lastname:'B'}, articleImages: [] };
+      const art = {
+        id: 7,
+        label: 'X',
+        description: 'Y',
+        content: 'Z',
+        category: { id: 1, label: 'C' },
+        user: { id: 2, firstname: 'A', lastname: 'B' },
+        articleImages: [],
+      };
       mockPrisma.article.findUnique.mockResolvedValue(art);
 
       const res = await service.findOne(7);
@@ -137,7 +167,10 @@ describe('ArticleService', () => {
         where: { id: 7 },
         select: expect.any(Object),
       });
-      expect(res).toEqual({ data: art, message: 'Articles récupéré avec succès' });
+      expect(res).toEqual({
+        data: art,
+        message: 'Articles récupéré avec succès',
+      });
     });
 
     it('devrait lever NotFoundException si introuvable', async () => {
@@ -148,26 +181,51 @@ describe('ArticleService', () => {
 
   describe('findUserArticle()', () => {
     it('devrait retourner les articles d’un utilisateur', async () => {
-      const arr = [{ id:1, label:'A', description:'D', content:'C', user:{id:2,firstname:'A',lastname:'B'}, articleImages: [] }];
+      const arr = [
+        {
+          id: 1,
+          label: 'A',
+          description: 'D',
+          content: 'C',
+          user: { id: 2, firstname: 'A', lastname: 'B' },
+          articleImages: [],
+        },
+      ];
       mockPrisma.article.findMany.mockResolvedValue(arr);
       const res = await service.findUserArticle(2);
       expect(prisma.article.findMany).toHaveBeenCalledWith({
         where: { userId: 2 },
         select: expect.any(Object),
       });
-      expect(res).toEqual({ data: arr, message: 'Articles récupéré avec succès' });
+      expect(res).toEqual({
+        data: arr,
+        message: 'Articles récupéré avec succès',
+      });
     });
 
     it('devrait lever NotFoundException si null', async () => {
       mockPrisma.article.findMany.mockResolvedValue(null);
-      await expect(service.findUserArticle(3)).rejects.toThrow(NotFoundException);
+      await expect(service.findUserArticle(3)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
   describe('update()', () => {
     it('devrait mettre à jour un article', async () => {
-      const dto: UpdateArticleDto = { label: 'N', description: 'D2', content:'C2', categoryId:1 };
-      const upd = { id:5, ...dto, category:{id:1,label:'C'}, user:{id:2, firstname:'A',lastname:'B'}, articleImages: [] };
+      const dto: UpdateArticleDto = {
+        label: 'N',
+        description: 'D2',
+        content: 'C2',
+        categoryId: 1,
+      };
+      const upd = {
+        id: 5,
+        ...dto,
+        category: { id: 1, label: 'C' },
+        user: { id: 2, firstname: 'A', lastname: 'B' },
+        articleImages: [],
+      };
       mockPrisma.article.update.mockResolvedValue(upd);
 
       const res = await service.update(5, dto);
@@ -176,17 +234,24 @@ describe('ArticleService', () => {
         where: { id: 5 },
         select: expect.any(Object),
       });
-      expect(res).toEqual({ data: upd, message: 'Articles mis à jour avec succès' });
+      expect(res).toEqual({
+        data: upd,
+        message: 'Articles mis à jour avec succès',
+      });
     });
 
     it('devrait lever NotFoundException si retourne null', async () => {
       mockPrisma.article.update.mockResolvedValue(null);
-      await expect(service.update(9, {} as any)).rejects.toThrow(NotFoundException);
+      await expect(service.update(9, {} as any)).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('devrait lever BadRequestException sur P2002', async () => {
       mockPrisma.article.update.mockRejectedValue({ code: 'P2002' });
-      await expect(service.update(5, {} as any)).rejects.toThrow(BadRequestException);
+      await expect(service.update(5, {} as any)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -196,7 +261,9 @@ describe('ArticleService', () => {
       mockPrisma.article.delete.mockResolvedValue(undefined);
 
       const res = await service.remove(10);
-      expect(prisma.article.findUnique).toHaveBeenCalledWith({ where: { id: 10 } });
+      expect(prisma.article.findUnique).toHaveBeenCalledWith({
+        where: { id: 10 },
+      });
       expect(prisma.article.delete).toHaveBeenCalledWith({ where: { id: 10 } });
       expect(res).toEqual({ message: 'Articles supprimé avec succès' });
     });

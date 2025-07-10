@@ -23,10 +23,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ExerciseUserModule,
     UserModule,
     ServeStaticModule.forRoot({
-      serveRoot: '/uploads',      
+      serveRoot: '/uploads',
       rootPath: join(process.cwd(), 'uploads'),
     }),
-],
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

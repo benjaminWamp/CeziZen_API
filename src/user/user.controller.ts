@@ -10,14 +10,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {
-  CreateUserDto,
-  CreateUserwithClerkDTo,
-} from './dto/create-user.dto';
-import {
-  UpdateUserCredentialsDto,
-  UpdateUserDto,
-} from './dto/update-user.dto';
+import { CreateUserDto, CreateUserwithClerkDTo } from './dto/create-user.dto';
+import { UpdateUserCredentialsDto, UpdateUserDto } from './dto/update-user.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
 import { UserType } from 'src/utils/types/PrismaApiModel.type';
@@ -52,12 +46,7 @@ export class UserController {
       perPage,
     );
 
-    return this.userService.findAll(
-      pageNumber,
-      perPageNumber,
-      orderBy,
-      sortBy,
-    );
+    return this.userService.findAll(pageNumber, perPageNumber, orderBy, sortBy);
   }
 
   @Get('clerk/:id')
@@ -68,7 +57,9 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<ApiReturns<UserType | null>> {
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiReturns<UserType | null>> {
     return this.userService.findOne(id);
   }
 
@@ -88,7 +79,9 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): Promise<string | { message: string }> {
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<string | { message: string }> {
     return this.userService.remove(id);
   }
 }

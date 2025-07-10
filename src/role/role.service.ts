@@ -32,9 +32,9 @@ export class RoleService {
 
       return { data: role, message: 'Rôle créé avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
@@ -70,9 +70,9 @@ if (error instanceof HttpException) {
         message: 'Rôles récupérés avec succès',
       };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -85,7 +85,7 @@ if (error instanceof HttpException) {
 
   async findOne(id: number) {
     if (id <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       const role = await this.prisma.role.findUnique({
@@ -102,9 +102,9 @@ if (error instanceof HttpException) {
 
       return { data: role, message: 'Rôle récupéré avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -117,7 +117,7 @@ if (error instanceof HttpException) {
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
     if (id <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       const role = await this.prisma.role.update({
@@ -135,9 +135,9 @@ if (error instanceof HttpException) {
 
       return { data: role, message: 'Rôle mis à jour avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -153,8 +153,8 @@ if (error instanceof HttpException) {
 
   async remove(id: number) {
     if (id <= 0) {
-    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
-  }
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
+    }
     try {
       const role = await this.prisma.role.findUnique({
         where: { id: id },
@@ -166,9 +166,9 @@ if (error instanceof HttpException) {
       await this.prisma.role.delete({ where: { id: id } });
       return { message: 'Rôle supprimé avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }

@@ -14,7 +14,7 @@ export class ExerciseService {
   constructor(private prisma: PrismaService) {}
 
   async create(createExerciceDto: CreateExerciseDto) {
-    try {      
+    try {
       const exercise = await this.prisma.exercise.create({
         data: createExerciceDto,
         select: {
@@ -88,8 +88,8 @@ export class ExerciseService {
 
   async findOne(id: number) {
     if (id <= 0) {
-    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
-  }
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
+    }
     try {
       const exercise = await this.prisma.exercise.findUnique({
         where: { id: id },
@@ -176,7 +176,7 @@ export class ExerciseService {
         );
       }
       throw new InternalServerErrorException(
-        'Une erreur inconnue est survenue lors de la suppression de l\'exercice',
+        "Une erreur inconnue est survenue lors de la suppression de l'exercice",
       );
     }
   }

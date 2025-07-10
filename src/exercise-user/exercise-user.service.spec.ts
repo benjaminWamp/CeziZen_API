@@ -45,7 +45,9 @@ describe('ExerciseUserService', () => {
 
     it('devrait créer une session avec succès', async () => {
       const mockSession = { id: 10, ...dto, user: {}, exercise: {} };
-      (prisma.exerciseSession.create as jest.Mock).mockResolvedValue(mockSession);
+      (prisma.exerciseSession.create as jest.Mock).mockResolvedValue(
+        mockSession,
+      );
 
       const result = await service.create(dto);
       expect(prisma.exerciseSession.create).toHaveBeenCalledWith({
@@ -121,9 +123,7 @@ describe('ExerciseUserService', () => {
     });
 
     it('devrait lever NotFoundException si introuvable', async () => {
-      (prisma.exerciseSession.findUnique as jest.Mock).mockResolvedValue(
-        null,
-      );
+      (prisma.exerciseSession.findUnique as jest.Mock).mockResolvedValue(null);
       await expect(service.findOne(99)).rejects.toThrow(NotFoundException);
     });
 

@@ -13,14 +13,11 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ArticleService {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(createArticleDto: CreateArticleDto) {
     try {
-      const {  ...ressourceData } =
-        createArticleDto;
+      const { ...ressourceData } = createArticleDto;
 
       const article = await this.prisma.article.create({
         data: {
@@ -53,15 +50,16 @@ export class ArticleService {
             select: {
               id: true,
               path: true,
-            }},
+            },
+          },
         },
       });
 
       return { data: ressourceFinal, message: 'Articles créé avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error.code === 'P2002') {
         throw new BadRequestException(
           'Une erreur de validation est survenue (données dupliquées)',
@@ -86,7 +84,6 @@ if (error instanceof HttpException) {
       );
     }
     try {
-
       if (sortBy !== 'asc' && sortBy !== 'desc') {
         throw new BadRequestException(
           'Le paramètre "sort" doit être "asc" ou "desc"',
@@ -137,7 +134,8 @@ if (error instanceof HttpException) {
             select: {
               id: true,
               path: true,
-            }},
+            },
+          },
         },
       });
 
@@ -154,9 +152,9 @@ if (error instanceof HttpException) {
         message: 'Articles récupérés avec succès',
       };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -169,8 +167,8 @@ if (error instanceof HttpException) {
 
   async findOne(id: number) {
     if (id <= 0) {
-    throw new BadRequestException('L\'identifiant doit être supérieur à 0');
-  }
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
+    }
     try {
       const Article = await this.prisma.article.findUnique({
         where: { id: id },
@@ -193,7 +191,8 @@ if (error instanceof HttpException) {
             select: {
               id: true,
               path: true,
-            }},
+            },
+          },
         },
       });
 
@@ -203,9 +202,9 @@ if (error instanceof HttpException) {
 
       return { data: Article, message: 'Articles récupéré avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -218,7 +217,7 @@ if (error instanceof HttpException) {
 
   async findUserArticle(userId: number) {
     if (userId <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       const Article = await this.prisma.article.findMany({
@@ -239,7 +238,8 @@ if (error instanceof HttpException) {
             select: {
               id: true,
               path: true,
-            }},
+            },
+          },
         },
       });
 
@@ -249,9 +249,9 @@ if (error instanceof HttpException) {
 
       return { data: Article, message: 'Articles récupéré avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -264,7 +264,7 @@ if (error instanceof HttpException) {
 
   async update(id: number, updateArticleDto: UpdateArticleDto) {
     if (id <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       const Article = await this.prisma.article.update({
@@ -289,7 +289,8 @@ if (error instanceof HttpException) {
             select: {
               id: true,
               path: true,
-            }},
+            },
+          },
         },
       });
 
@@ -299,9 +300,9 @@ if (error instanceof HttpException) {
 
       return { data: Article, message: 'Articles mis à jour avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
@@ -317,7 +318,7 @@ if (error instanceof HttpException) {
 
   async remove(id: number) {
     if (id <= 0) {
-      throw new BadRequestException('L\'identifiant doit être supérieur à 0');
+      throw new BadRequestException("L'identifiant doit être supérieur à 0");
     }
     try {
       const article = await this.prisma.article.findUnique({
@@ -331,11 +332,11 @@ if (error instanceof HttpException) {
         where: { id: id },
       });
 
-      return {message: 'Articles supprimé avec succès' };
+      return { message: 'Articles supprimé avec succès' };
     } catch (error) {
-if (error instanceof HttpException) {
-      throw error;
-    }
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (error instanceof NotFoundException) {
         throw error;
       }
