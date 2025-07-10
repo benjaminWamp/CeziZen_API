@@ -99,7 +99,7 @@ jobs:
       name: recette
       url: http://ec2-54-86-190-187.compute-1.amazonaws.com/
     needs:
-      - build
+      - docker
     steps:
       - uses: appleboy/ssh-action@v1
         with:
