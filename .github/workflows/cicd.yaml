@@ -64,7 +64,7 @@ jobs:
   docker:
     name: 🐋 Build & Push Docker
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'recette')
+    # if: contains(github.ref, 'recette')
     # needs: test
     permissions:
       contents: read
@@ -94,7 +94,7 @@ jobs:
 
   deploy-docker-on-recette:
     runs-on: ubuntu-latest
-    if: contains(github.ref, 'recette')
+    # if: contains(github.ref, 'recette')
     environment:
       name: recette
       url: http://ec2-54-86-190-187.compute-1.amazonaws.com/
